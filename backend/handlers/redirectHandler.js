@@ -1,12 +1,17 @@
 const { customAlphabet } = require('nanoid');
-const { URLShortener } = require('../db');
+const { URLShortener, URLShortenerA, URLShortenerB } = require('../db');
+const { determineDatabase, getModelForDatabase } = require('./findDatabase');
 
 async function redirectHandler(req,res){
     try {
     const { shortUrl } = req.params;
+
+    const database = determineDatabase(shortUrl);
+
+    const urlshortner = getModelForDatabase(database);
     
     // find a record in the URLShortener table based on the short URL
-    const result = await URLShortener.findOne({
+    const result = await urlshortner.findOne({
         attributes: ['original_url'],
         where: {
             short_url: shortUrl,
