@@ -1,12 +1,13 @@
-
 const { Sequelize, DataTypes } = require('sequelize');
 
+// Define a Sequelize instance for database connection
 const sequelize = new Sequelize('url_shortner', 'shivam', 'password', {
   host: 'localhost',
   dialect: 'postgres',
   port: 5432,
 });
 
+// Define the URLShortener model with Sequelize DataTypes
 const URLShortener = sequelize.define('URLShortener', {
   id: {
     type: DataTypes.INTEGER,
