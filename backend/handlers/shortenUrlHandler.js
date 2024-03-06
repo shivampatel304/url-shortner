@@ -8,20 +8,34 @@ const base62Alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrst
 async function shortenUrlHandler(req,res){
     try{
         const { originalUrl, expiredAt } = req.body;
-        
-        // creating base62 nanoid
-        const nanoid = customAlphabet(base62Alphabet,7);
-        const shortUrl = nanoid();
-        
-        // storing it in database
-        await URLShortener.create({
-            original_url: originalUrl,
-            short_url: shortUrl,
-            expired_at: expiredAt,
+
+        // checking if the original url is already existed in our database
+        const result = await URLShortener.findOne({
+            attributes: ['short_url'],
+            where: {
+                original_url: originalUrl,
+            },
         });
-    
-        res.json({ shortUrl });
-        } catch (error) {
+
+        // if presented then return the shorturl else create a new short url and add it to db
+        if(result != null){
+            const reply = result.short_url;
+            res.json({ reply });
+        }else{
+            // creating base62 nanoid
+            const nanoid = customAlphabet(base62Alphabet,7);
+            const shortUrl = nanoid();
+            
+            // storing it in database
+            await URLShortener.create({
+                original_url: originalUrl,
+                short_url: shortUrl,
+                expired_at: expiredAt,
+            });
+        
+            res.json({ shortUrl });
+        }
+    } catch (error) {
         console.error('Error creating short URL:', error.message);
         res.status(500).json({ error: 'Internal Server Error', message: error.message });
     }
