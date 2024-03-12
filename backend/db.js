@@ -29,6 +29,10 @@ const URLShortener = db.define('URLShortener', {
   expired_at: {
     type: DataTypes.DATE,
   },
+  access_count: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
+  },
 });
 
 const URLShortenerA = dbA.define('URLShortener', {
@@ -54,6 +58,10 @@ const URLShortenerA = dbA.define('URLShortener', {
   expired_at: {
     type: DataTypes.DATE,
   },
+  access_count: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
+  },
 });
 
 const URLShortenerB = dbB.define('URLShortener', {
@@ -78,6 +86,10 @@ const URLShortenerB = dbB.define('URLShortener', {
     },
     expired_at: {
       type: DataTypes.DATE,
+    },
+    access_count: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
     },
   });
 
